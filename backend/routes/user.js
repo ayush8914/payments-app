@@ -171,10 +171,12 @@ router.get("/bulk", async (req, res) => {
 router.get("/profile", authMiddleware, async (req, res) => {
     const userID = req.user._id;
     const user = await User.findById(userID);
+    const account = await Account.findOne({ userID: userID });
     res.status(200).json({
         first_name: user.first_name,
         last_name: user.last_name,
         userName: user.userName,
+        balance: Math.round(account.balance * 100) / 100 || account.balance || 0,
         _id: user._id
     })
 })
